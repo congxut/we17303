@@ -1,0 +1,706 @@
+AddProduct.tsx
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Button, Form, Input, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { RcFile, UploadChangeParam } from 'antd/lib/upload/interface';
+import { message } from 'antd';
+
+const app = (props: IProps) => {
+  const onFinish = (values: any) => {
+    
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  return (
+    <div>
+      <Form
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ width: 1000, margin: "0 auto" }}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label=""
+          name="name"
+          rules={[{ required: true, message: "" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="price"
+          rules={[{ required: true, message: "" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="image"
+          rules={[{ required: true, message: "Please input product image!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="description"
+          rules={[{ required: true, message: "" }]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+
+ProductManagement.tsx
+import { useState } from 'react';
+import { Space, Table, Tag, Button, Input, Image, Popconfirm } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { Link } from 'react-router-dom';
+import { IProduct } from '../../types/product';
+import { message } from 'antd';
+interface DateType extends IProduct {
+  key: string | number;
+}
+
+const app = () => {
+  const [searchText, setSearchText] = useState('');
+  
+  
+    interface DataType {
+    key: string;
+    name: string;
+    price: number;
+    address: string;
+    tags: string[];
+  }
+  const columns: ColumnsType<DataType> = [
+    {
+      title: '',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: '',
+      dataIndex: 'price',
+      key: 'price',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: '',
+      dataIndex: 'image',
+      key: 'image',
+      render: () => <a>{text}</a>,
+    },
+    {
+      title: '',
+      dataIndex: 'description',
+      key: 'description',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (record) => (
+        <Space size='middle'>
+          <Popconfirm
+            placement='top'
+            title=''
+            onConfirm={}
+            okText='Yes'
+            cancelText='No'
+          >
+            <Button type='primary'></Button>
+          </Popconfirm>
+
+          <Button type='primary'>
+            <Link to={}>
+            </Link>
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <Input.Search
+        placeholder=''
+        allowClear
+        onChange={(e) => setSearchText(e.target.value)}
+        style={{ width: 300, marginBottom: 16 }}
+      />
+      <Button type='primary'>
+        <Link to={}></Link>
+      </Button>
+      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
+    </div>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+UpdateProduct.tsx
+import React, { useEffect, useState } from 'react';
+import { IProduct } from '../../types/product';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Form, Input, Upload } from 'antd';
+import { useForm } from 'react-hook-form';
+import { UploadOutlined } from '@ant-design/icons';
+import { message } from 'antd';
+
+const app = (props: IProps) => {
+  useEffect(() => {
+    const currentProduct = props.products.find(
+      (product: IProduct) => product.id == Number(id)
+    );
+    setProduct(currentProduct);
+  }, [props]);
+
+  useEffect(() => {
+    setFields();
+  }, [product]);
+
+  const [form] = Form.useForm();
+
+  const setFields = () => {
+    form.setFieldsValue({
+      id: ,
+      name: ,
+      price: ,
+      image: ,
+      description: ,
+    });
+  };
+
+  const onFinish = (values: any) => {
+    message.success("");    
+  };
+
+  const [previewImage, setPreviewImage] = useState<string>();
+
+  return (
+    <div>
+      <Form form={form} style={{ maxWidth: 600 }} onFinish={onFinish}>
+        <Form.Item
+          label=""
+          name="id"
+          style={{ display: "none" }}
+          rules={[{ required: true, message: "Please input product ID!" }]}
+        >
+          <Input disabled />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="name"
+          rules={[{ required: true, message: "Please input product name!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="price"
+          rules={[{ required: true, message: "Please input product price!" }]}
+        >
+          <Input type="number" min={0} step={0.01} />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="image"
+          rules={[{ required: true, message: "Please input product image!" }]}
+        >
+          <Input/>
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name="description"
+          rules={[
+            { required: true, message: "Please input product description!" },
+          ]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+ProductPage.tsx
+import React from 'react';
+import { Card, Col, Row, Typography } from 'antd';
+import { Link } from 'react-router-dom';
+
+const app = (props) => {
+  const { Meta } = Card;
+
+  return (
+    <div style={{ background: '#ECECEC', padding: '30px' }}>
+      <Row gutter={[16, 16]}>
+        {props.map((item) => (
+          <Col span={6} key={}>
+            <Link to={`/products/${}`}>
+              <Card hoverable cover={<img alt={} src={} />}>
+                <Meta
+                  title={}
+                  description={
+                    <>
+                      <p>{} VND</p>
+                      <p>{}</p>
+                    </>
+                  }
+                />
+              </Card>
+            </Link>
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+ProductDetail.tsx
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Card, Row, Col, Image, Button } from "antd";
+
+const { Meta } = Card;
+
+const app = (props) => {
+  useEffect(() => {
+    setProduct(props.products.find((product) => product.id == id));
+  }, [id, props.products]);
+
+  return (
+    <div
+      style={{
+        background: "#ECECEC",
+        padding: "30px",
+      }}
+    >
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
+          <Image
+            style={{
+              width: "300px",
+              height: "300px",
+            }}
+            src={}
+          />
+        </Col>
+        <Col span={12}>
+          <Card>
+            <Meta title={} description={} />
+            <p style={{ marginTop: "16px", color: "red" }}>
+              Price: {} VND
+            </p>
+
+            <Button type="primary"></Button>
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+Signin.tsx
+import { Button, Form, Input, Space } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { message } from "antd";
+
+type Props = {};
+
+const app = (props: Props) => {
+  const onFinish = async (values: any) => {
+    try {
+      const user = await signin(values.email, values.password);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      message.success("");     
+    } catch (error) {
+      message.error("");
+    }
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+  return (
+    <>
+      <Form
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600, color: "white" }}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          style={{ color: "white" }}
+          label=""
+          name=""
+          rules={[{ required: true, message: "Please input your email!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label=""
+          name=""
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+      <Space>
+        <Link to={""}>Signup</Link>
+      </Space>
+    </>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+signup.tsx
+import { Button, Checkbox, Form, Input, Select } from "antd";
+const { Option } = Select;
+import { message } from "antd";
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+
+const app = (props: Props) => {
+  const [form] = Form.useForm();
+  const onFinish = async (values: any) => {
+    const data = await Signup(values);
+    message.success("");
+  };
+
+  return (
+    <Form
+      {...formItemLayout}
+      form={form}
+      name="register"
+      onFinish={onFinish}
+      initialValues={{
+        residence: ["zhejiang", "hangzhou", "xihu"],
+        prefix: "86",
+      }}
+      style={{ maxWidth: 600 }}
+      scrollToFirstError
+    >
+      <Form.Item
+        name=""
+        label=""
+        tooltip="What do you want others to call you?"
+        rules={[
+          {
+            required: true,
+            message: "Please input your nickname!",
+            whitespace: true,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name=""
+        label=""
+        rules={[
+          {
+            type: "",
+            message: "The input is not valid E-mail!",
+          },
+          {
+            required: true,
+            message: "Please input your E-mail!",
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name=""
+        label=""
+        rules={[
+          {
+            required: true,
+            message: "Please input your password!",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item
+        style={{ color: "white" }}
+        name="confirmpassword"
+        label="Confirm Password"
+        dependencies={["password"]}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please confirm your password!",
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("password") === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error("The two passwords that you entered do not match!")
+              );
+            },
+          }),
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item
+        name="agreement"
+        valuePropName="checked"
+        rules={[
+          {
+            validator: (_, value) =>
+              value
+                ? Promise.resolve()
+                : Promise.reject(new Error("Should accept agreement")),
+          },
+        ]}
+        {...tailFormItemLayout}
+      >
+        <Checkbox style={{ color: "white" }}>
+          I have read the <a href="">agreement</a>
+        </Checkbox>
+      </Form.Item>
+      <Form.Item {...tailFormItemLayout}>
+        <Button type="primary" htmlType="submit">
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+
+
+App.tsx
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import HomePage from './pages/HomePage';
+import ProductPage from './pages/Product';
+import ProductDetailPage from './pages/ProductDetail';
+import Dashboard from './pages/admin/Dashboard';
+import ProductManagementPage from './pages/admin/ProductManagement';
+import AddProductPage from './pages/admin/AddProduct';
+import { addProduct, getAllProduct, updateProduct } from './api/product';
+import UpdateProductPage from './pages/admin/UpdateProduct';
+import WebsiteLayout from './pages/layouts/WebsiteLayout';
+import AdminLayout from './pages/layouts/AdminLayout';
+import SignUp from './pages/signup';
+import Signin from './pages/signin';
+import { IProduct } from './types/product';
+
+function App() {
+  const [products, setProduct] = useState<IProduct[]>([]);
+  useEffect(() => {
+    getAllProduct().then(({ data }) => setProduct(data));
+  }, []);
+
+  const onHandleRemove = (id) => {
+    fetch('http://localhost:3000/products/' + id, {
+      method: 'DELETE',
+    }).then(() => setProduct(products.filter((item) => item.id != id)));
+  };
+  const onHandleAdd = (product) => {
+    addProduct(product).then(() => {
+      getAllProduct().then(({ data }) => setProduct(data));
+    });
+  };
+  const onHandleUpdate = (product) => {
+    updateProduct(product).then(() =>
+      setProduct(
+        products.map((item) => (item.id == product.id ? product : item))
+      )
+    );
+  };
+  return (
+    <div className='App'>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<WebsiteLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path='signup' element={<SignUp />} />
+            <Route path='signin' element={<Signin />} />
+
+            <Route path='products'>
+              <Route
+                index
+                element={
+                  <ProductPage products={products} onRemove={onHandleRemove} />
+                }
+              />
+              <Route
+                path=':id'
+                element={<ProductDetailPage products={products} />}
+              />
+            </Route>
+          </Route>
+
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path='products'>
+              <Route
+                index
+                element={
+                  <ProductManagementPage
+                    products={products}
+                    onRemove={onHandleRemove}
+                  />
+                }
+              />
+              <Route
+                path='add'
+                element={<AddProductPage onAdd={onHandleAdd} />}
+              />
+              <Route
+                path=':id/update'
+                element={
+                  <UpdateProductPage
+                    onUpdate={onHandleUpdate}
+                    products={products}
+                  />
+                }
+              />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+

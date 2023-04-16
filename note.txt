@@ -1,3 +1,36 @@
+auth.tsx
+import instance from './instance';
+
+export const signin = async (email: string, password: string) => {
+  try {
+    const response = await instance.get('http://localhost:3000/users');
+    const user = response.data.find(
+      (u: any) => u.email === email && u.password === password
+    );
+    if (user) {
+      return user;
+    } else {
+      throw new Error('Invalid email or password');
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const Signup = async (values) => {
+  try {
+    const response = await instance.post('/users', values);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+
+
+
+
+
+
 AddProduct.tsx
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -272,6 +305,163 @@ const app = (props: IProps) => {
 
 export default app;
 
+
+
+
+
+
+
+
+AdminLayout.tsx
+import React, { useState } from "react";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+import { Layout, Menu, theme } from "antd";
+import { Outlet, useNavigate } from "react-router-dom";
+
+const { Header, Sider, Content } = Layout;
+
+const app = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
+  return (
+    <Layout>
+      <Sider trigger={null} collapsible collapsed={collapsed}>
+        <div className="logo" />
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={["1"]}
+          items={[
+            {
+              key: "",
+              icon: <VideoCameraOutlined />,
+              label: "Dashboard",
+            },
+            {
+              key: "",
+              icon: <UserOutlined />,
+              label: "Products",
+              children: [
+                {
+                  key: "",
+                  icon: <VideoCameraOutlined />,
+                  label: "Product List",
+                },
+                {
+                  key: "",
+                  icon: <VideoCameraOutlined />,
+                  label: "Add Product",
+                },
+                {
+                  key: "",
+                  icon: <UploadOutlined />,
+                  label: "Update Product",
+                },
+              ],
+            },
+          ]}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          {React.createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: "trigger",
+              onClick: () => setCollapsed(!collapsed),
+            }
+          )}
+        </Header>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+          }}
+        >
+          
+        </Content>
+      </Layout>
+    </Layout>
+  );
+};
+
+export default app;
+
+
+
+
+
+
+
+
+WebsiteLayout.tsx
+import React from 'react';
+import { Layout, Menu, Button } from 'antd';
+import { HomeOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Link, Outlet } from 'react-router-dom';
+
+const { Header, Content, Footer } = Layout;
+
+const app = () => {
+  return (
+    <Layout>
+      <Header style={{ backgroundColor: '#f0f2f5' }}>
+        <div className='logo' style={{ float: 'left' }}>
+          <h2 style={{ margin: '0' }}>Cong Xut</h2>
+        </div>
+        <Menu
+          theme='light'
+          mode='horizontal'
+          defaultSelectedKeys={['home']}
+          style={{ float: 'right', lineHeight: '64px' }}
+        >
+          <Menu.Item key='home' icon={<HomeOutlined />}>
+            <Link to={'/'}></Link>
+          </Menu.Item>
+          <Menu.Item key='about' icon={<UserOutlined />}>
+            <Link to={'/'}></Link>
+          </Menu.Item>
+          <Menu.Item key='signup' icon={<PhoneOutlined />}>
+            <Link to={'/'}></Link>
+          </Menu.Item>
+          <Menu.Item key='signin'>
+            <Link to={'/'}></Link>
+          </Menu.Item>
+        </Menu>
+      </Header>
+      <Content>
+        <div
+          style={{
+            width: '100%',
+          }}
+        >
+          <img
+            src='https://img.timviecthietke.com/2021/06/kich-thuoc-banner-website-1-768x251.png'
+            alt=''
+            style={{ width: '100%' }}
+          />
+        </div>
+      </Content>
+      
+      <Footer style={{ textAlign: 'center' }}>
+        ©{new Date().getFullYear()} Antd Design
+      </Footer>
+    </Layout>
+  );
+};
+
+export default app;
 
 
 
